@@ -1,42 +1,58 @@
 import { Payment, initMercadoPago } from "@mercadopago/sdk-react";
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { Spinner } from "react-bootstrap";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export const Pagamento = () => {
   const [preferenceId, setPreferenceId] = useState(null);
   const location = useLocation();
-  const { title, value, quant, description, total } = location.state;
+  const navigate = useNavigate();
+
+  const { title, value, quant, description, total, imgURL } = location.state;
 
   initMercadoPago('TEST-be2994ca-82f0-4ef3-9764-1cbe6aeb3468');
-  const createPreference = async () => {
-    const response = await fetch("https://api.mercadopago.com/checkout/preferences", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer TEST-5722286431788223-090517-a5f93069f7d1cbe10ee06eef73dceeb3-624922489"
-      },
-      body: JSON.stringify({
-        items: [
-          {
-            title: title,
-            description: description,
-            quantity: quant,
-            currency_id: "BRL",
-            unit_price: value
-          }
-        ]
-      })
-    });
-    const data = await response.json();
-    console.log(data.id);
-    return data.id;
-  };
+  useEffect(() => {
+    const createPreference = async () => {
+      const response = await fetch("https://api.mercadopago.com/checkout/preferences", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer TEST-5722286431788223-090517-a5f93069f7d1cbe10ee06eef73dceeb3-624922489"
+        },
+        body: JSON.stringify({
+          items: [
+            {
+              title: title,
+              description: description,
+              picture_url: imgURL,
+              category_id: "electronics",
+              quantity: quant,
+              currency_id: "BRL",
+              unit_price: value
+            }
+          ]
+        }),
+      });
+  
+      const data = await response.json();
+      setPreferenceId(data.id)
+    };
+    createPreference();
+  }, [description, imgURL, quant, title, value])
+
+  if (!preferenceId) {
+    return (
+      <div style={{ height: '100vh' }} className="d-flex justify-content-center align-items-center he">
+        <Spinner animation="border" variant="success" size="lg"/>
+      </div>
+    ); // Renderiza isso enquanto o preferenceId não estiver definido
+  }
 
   const initialization = {
     amount: total,
-    preferenceId: createPreference()
-    // preferenceId: "<PREFERENCE_ID>",
+    preferenceId: preferenceId,
   };
+
   const customization = {
     paymentMethods: {
       ticket: "all",
@@ -62,7 +78,7 @@ export const Pagamento = () => {
       .then((response) => response.json())
       .then((data) => {
         // receber o resultado do pagamento
-        console.log(data);
+        navigate(`/pagamento/statusPagamento`, { state: { id: data.id } });
         resolve();
       })
       .catch((error) => {

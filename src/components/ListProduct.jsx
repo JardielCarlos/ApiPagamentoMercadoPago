@@ -1,48 +1,24 @@
 import { useNavigate } from "react-router-dom";
 import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export const ListProduct = () => {
   const [quant, setQuantity] = useState(1)
+  const [products, setProducts] = useState([])
   const navigate = useNavigate();
 
-  const CompleteSell = (value, quant, title, description, ) => {
+  const CompleteSell = (value, quant, title, description, imgURL) => {
     let total = value * quant;
-    // console.log(valor);
-    // window.location.href = `/CheckoutPagamentos.html?value=${valor}`;
-    navigate(`/pagamento`, { state: { title, value, quant, description, total } });
+    navigate(`/pagamento`, { state: { title, value, quant: parseInt(quant), description, total, imgURL } });
   }
-
   const handleChangeQuant = (e) => {
     setQuantity(e.target.value)
   }
-
-  const products = [
-    {
-      title: "Placa de vídeo Geforce RTX3060",
-      description: "Placa de vídeo RTX3060 que rodas todos os jogos atuais com tranquilidade.",
-      value: 2000,
-      imgURL: "https://images.unsplash.com/photo-1674741250252-edb6a227c166?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80"
-    },
-    {
-      title: "Processador Ryzen 5",
-      description: "Processador Ryzen 5 5500H para poder abrir qualquer arquivo e software.",
-      value: 1500,
-      imgURL: "https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80"
-    },
-    {
-      title: "Memória ram 16gb",
-      description: "Memória ram 16gb com frequencia de 3200mhz da marca adata.",
-      value: 450,
-      imgURL: "https://images.unsplash.com/photo-1542978709-19c95dc3bc7e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80"
-    },
-    {
-      title: "Gabinete de computador Corsair",
-      description: "Gabinete Moderno para você comprar sem medo.",
-      value: 300,
-      imgURL: "https://plus.unsplash.com/premium_photo-1671439429636-6d8d66247143?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2057&q=80"
-    }
-  ]
+  useEffect(() => {
+    fetch("http://127.0.0.1:5000/products")
+    .then((resp) => resp.json())
+    .then(data => setProducts(data))
+  }, [])
 
   return (
     <>
@@ -67,7 +43,7 @@ export const ListProduct = () => {
                       <option value='4'>4</option>
                       <option value='5'>5</option>
                     </Form.Select>
-                    <Button variant="success" onClick={() => CompleteSell(product.value, quant)}>Comprar Agora</Button>
+                    <Button variant="success" onClick={() => CompleteSell(product.value, quant, product.imgURL)}>Comprar Agora</Button>
                   </Card.Body>
                 </Card>
             </Col>
