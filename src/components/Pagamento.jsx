@@ -1,6 +1,6 @@
 import { Payment, initMercadoPago } from "@mercadopago/sdk-react";
 import { useEffect, useState } from "react";
-import { Spinner } from "react-bootstrap";
+import { Button, Card, Spinner } from "react-bootstrap";
 import { useLocation, useNavigate } from "react-router-dom";
 
 export const Pagamento = () => {
@@ -9,7 +9,7 @@ export const Pagamento = () => {
   const navigate = useNavigate();
 
   const { title, value, quant, description, total, imgURL } = location.state;
-
+  console.log(title);
   initMercadoPago('TEST-be2994ca-82f0-4ef3-9764-1cbe6aeb3468');
   useEffect(() => {
     const createPreference = async () => {
@@ -59,7 +59,7 @@ export const Pagamento = () => {
       bankTransfer: "all",
       creditCard: "all",
       debitCard: "all",
-      mercadoPago: "all",
+      // mercadoPago: "all",
     },
   };
   const onSubmit = async (
@@ -100,13 +100,26 @@ export const Pagamento = () => {
  
   return (
     <div>
-      <Payment
-        initialization={initialization}
-        customization={customization}
-        onSubmit={onSubmit}
-        onReady={onReady}
-        onError={onError}
-      />
+      <div className="d-flex"> 
+        <Payment
+          initialization={initialization}
+          customization={customization}
+          onSubmit={onSubmit}
+          onReady={onReady}
+          onError={onError}
+        />
+        <Card style={{ width: '18rem' }}>
+          <Card.Img variant="top" src={imgURL} />
+          <Card.Body>
+            <Card.Title>{title}</Card.Title>
+            <Card.Text>
+              {description}
+            </Card.Text>
+            <Button variant="primary">Subtotal</Button>
+          </Card.Body>
+        </Card>
+      </div>
     </div>
+    
   )
 }
