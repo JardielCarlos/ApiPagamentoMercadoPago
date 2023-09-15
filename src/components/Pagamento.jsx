@@ -1,7 +1,9 @@
 import { Payment, initMercadoPago } from "@mercadopago/sdk-react";
 import { useEffect, useState } from "react";
-import { Button, Card, Spinner } from "react-bootstrap";
+import { Card, Col, ListGroup, Row, Spinner } from "react-bootstrap";
 import { useLocation, useNavigate } from "react-router-dom";
+import { IoArrowBackSharp } from 'react-icons/io5';
+import './card.css'
 
 export const Pagamento = () => {
   const [preferenceId, setPreferenceId] = useState(null);
@@ -97,10 +99,17 @@ export const Pagamento = () => {
     Aqui você pode ocultar loadings do seu site, por exemplo.
   */
  };
+
+  const voltar = () => {
+    navigate('/');
+  };
+
  
   return (
-    <div>
-      <div className="d-flex"> 
+    <>
+      <IoArrowBackSharp style={{cursor: "pointer", marginBottom: '-1rem', zIndex: 1, position: 'relative', left: "2rem"}} size={30} onClick={voltar}/>
+      <Row className="mx-5">
+      <Col>
         <Payment
           initialization={initialization}
           customization={customization}
@@ -108,18 +117,24 @@ export const Pagamento = () => {
           onReady={onReady}
           onError={onError}
         />
-        <Card style={{ width: '18rem' }}>
-          <Card.Img variant="top" src={imgURL} />
+      </Col>
+      <Col className="d-flex justify-content-center mt-5">
+        <Card className="card-custom w-50 mx-5">
+          <Card.Header as="h5" className="header-custom">Resumo do Pedido</Card.Header>
+          <Card.Img variant="top" src={imgURL} className="img-custom" />
           <Card.Body>
             <Card.Title>{title}</Card.Title>
-            <Card.Text>
-              {description}
-            </Card.Text>
-            <Button variant="primary">Subtotal</Button>
+            <Card.Text>{description}</Card.Text>
           </Card.Body>
+          <ListGroup variant="flush">
+            <ListGroup.Item className="list-item-custom"><strong>Quantidade: </strong>{quant}</ListGroup.Item>
+            <ListGroup.Item><strong>Valor Unitário</strong> R$:{value},00</ListGroup.Item>
+            <ListGroup.Item className="list-item-custom"><strong>Total </strong> R$:{total},00
+            </ListGroup.Item>
+          </ListGroup>
         </Card>
-      </div>
-    </div>
-    
+      </Col>
+    </Row>
+    </>
   )
 }

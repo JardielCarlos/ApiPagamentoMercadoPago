@@ -16,7 +16,7 @@ export const ListProduct = () => {
   }
   useEffect(() => {
     fetch("http://127.0.0.1:5000/products")
-    .then((resp) => resp.json())
+    .then((resp) => resp.json())  
     .then(data => setProducts(data))
   }, [])
 

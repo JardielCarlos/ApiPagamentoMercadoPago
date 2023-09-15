@@ -1,0 +1,24 @@
+.card-custom {
+  width: 18rem;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+  border-radius: 15px;
+  max-height: 508px;
+}
+
+.header-custom {
+  background-color: #6c757d;
+  color: white;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+}
+
+.img-custom {
+  width: 100%;
+  height: 15vw;
+  object-fit: cover;
+}
+
+.list-item-custom {
+  background-color: #f8f9fa;
+}
