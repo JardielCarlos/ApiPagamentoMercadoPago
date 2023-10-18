@@ -17,6 +17,8 @@ volte uma pasta com `cd ..`
 entre na pasta do backend `cd /Back`
 ## Ativando a virtual env
 `source /venv/bin/activate`
+## baixando dependências
+`pip install -r requirements.txt`
 ## execução do backend
 `flask run`
 
