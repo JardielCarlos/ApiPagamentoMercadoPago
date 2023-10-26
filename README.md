@@ -1,9 +1,9 @@
 # Instalação das dependências
 
 ## Entra na pasta Front
-`cd /Front`
-`npm install ou yarn install`
-`npm run build ou yarn build`
+- `cd /Front`
+- `npm install ou yarn install`
+- `npm run build ou yarn build`
 
 # Construção e execução do Docker
 ## Construção
